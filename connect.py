@@ -83,7 +83,7 @@ if __name__ == '__main__':
         interface = sys.argv[3]
 
     while True:
-        if not my_is_net_ok("info.tsinghua.edu.cn"):
+        if not my_is_net_ok("www.baidu.com"):
             print("\n");
             print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())));
             print('The network is disconnected.');
