@@ -21,6 +21,18 @@ def is_net_ok(ping_target):
         # print('Ping success.');
         return True;
 
+def my_is_net_ok(host):
+    """
+    Returns True if host (str) responds to a ping request.
+    Remember that a host may not respond to a ping (ICMP) request even if the host name is valid.
+    """
+    # Option for the number of packets as a function of
+    param = '-n' if platform.system().lower()=='windows' else '-c'
+    # Building the command. Ex: "ping -c 1 google.com"
+    command = ['ping', param, '1', host]
+    return subprocess.call(command, stdout=subprocess.DEVNULL) == 0
+
+
 def wlan_connect(name, interface):
     null = open(os.devnull, 'w');
     res = subprocess.call('netsh wlan connect name="' + name + '" interface="' + interface + '"', shell = True, stdout = null, stderr = null);
@@ -71,13 +83,14 @@ if __name__ == '__main__':
         interface = sys.argv[3]
 
     while True:
-        if not is_net_ok("info.tsinghua.edu.cn"):
+        if not my_is_net_ok("info.tsinghua.edu.cn"):
             print("\n");
             print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())));
             print('The network is disconnected.');
-            if wlan_connect(name, interface):
-                time.sleep(5); # Win10连接wlan之后会立即自动弹出登录页面，造成"getaddrinfo failed"
-                login(username, password);
+            #if wlan_connect(name, interface):
+            #    time.sleep(5); # Win10连接wlan之后会立即自动弹出登录页面，造成"getaddrinfo failed"
+            time.sleep(3)
+            login(username, password);
         else:
             time.sleep(1);
         
